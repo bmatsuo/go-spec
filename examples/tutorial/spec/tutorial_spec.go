@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package spectutorial
+package main
 /*
  *  Filename:    main_test.go
  *  Author:      Bryan Matsuo <bmatsuo@soe.ucsc.edu>

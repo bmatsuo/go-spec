@@ -7,9 +7,13 @@
 
 include $(GOROOT)/src/Make.inc
 
-TARG=spectutorial
+TARG=tutorial
 GOFILES=\
-        spectutorial.go\
+        tutorial.go\
 
-include $(GOROOT)/src/Make.pkg
+spec: gospec clean
+   
+gospec:
+	gospec -v spec
 
+include $(GOROOT)/src/Make.cmd

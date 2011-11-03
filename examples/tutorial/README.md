@@ -1,36 +1,33 @@
-*spec-tutorial version 0.0_1*
+*go-spec/examples/tutorial version 0.0_1*
 
-About spec-tutorial
-=============
+About the tutorial
+==============
 
-<no value>
+The go-spec tutorial highlights the features of go-spec. It demonstates use of
+the the command line utility gospec. It also using the "spec" package to
+describe its capabilities and provide simple examples.
 
 Documentation
 =============
 Prerequisites
 -------------
 
-You must have Go installed (http://golang.org/). 
+* You must have Go installed (http://golang.org/).
 
-Installation
--------------
+* You must have package "spec" installed locally
 
-Use goinstall to install spec-tutorial
+* You must also have the gospec program installed
 
-    goinstall github.com/bmatsuo/spectutorial
+Usage
+-----
 
-General Documentation
----------------------
+Run the tutorial with command
 
-Use godoc to vew the documentation for spec-tutorial
+    gomake
 
-    godoc github.com/bmatsuo/spectutorial
+This executes the command
 
-Or alternatively, use a godoc http server
-
-    godoc -http=:6060
-
-and view the url http://localhost:6060/pkg/github.com/bmatsuo/spectutorial/
+    gospec -v
 
 Author
 ======
