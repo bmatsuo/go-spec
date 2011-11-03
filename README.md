@@ -19,18 +19,7 @@ You must have Go installed (http://golang.org/).
 Installation
 -------------
 
-Use goinstall to install the `gospec` command
-
-    goinstall github.com/bmatsuo/go-spec/gospec
-
-This will install the "spec" package aswell. Or, you can build both the package
-and the program yourself by cloning the repository.
-
-    git clone https://github.com/bmatsuo/go-spec/gospec
-    cd go-spec/spec
-    gomake install
-    cd ../gospec
-    gomake install
+See `gospec/`
 
 Examples
 --------
@@ -52,22 +41,7 @@ tests written using the "spec" package.
 General Documentation
 ---------------------
 
-For documentation of the "spec" package
-
-    godoc github.com/bmatsuo/go-spec/spec
-
-For documentation of `gospec`
-
-    godoc github.com/bmatsuo/go-spec/gospec
-
-Alternatively, use a godoc http server
-
-    godoc -http=:6060
-
-and view the urls 
-
-* http://localhost:6060/pkg/github.com/bmatsuo/go-spec/spec
-* http://localhost:6060/pkg/github.com/bmatsuo/go-spec/gospec
+See `spec/` and `gospec/`
 
 Author
 ======
