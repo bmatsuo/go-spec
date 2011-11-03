@@ -11,39 +11,39 @@ package main
  *  Usage:       gospec [options] ARGUMENT ...
  */
 import (
-    "fmt"
-    "os"
+	"fmt"
+	"os"
 )
 
-func Error(err os.Error) {
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "gospec: %s\n", err.String())
-    }
+func Error(err error) {
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "gospec: %s\n", err.Error())
+	}
 }
 
-func FatalError(err os.Error) {
-    if err != nil {
-        Error(err)
-        os.Exit(1)
-    }
+func FatalError(err error) {
+	if err != nil {
+		Error(err)
+		os.Exit(1)
+	}
 }
 
 var opt options
 
 func main() {
-    opt = parseFlags()
-    root := "./spec"
-    specfiles, err := SpecGoFiles(root)
-    FatalError(err)
-    if len(specfiles) == 0 {
-        FatalError(fmt.Errorf("No spec files in %s", root))
-    }
+	opt = parseFlags()
+	root := "./spec"
+	specfiles, err := SpecGoFiles(root)
+	FatalError(err)
+	if len(specfiles) == 0 {
+		FatalError(fmt.Errorf("No spec files in %s", root))
+	}
 
-    cmd := GoTestCommand().
-        SpecGoFiles(specfiles)
-    if opt.Verbose {
-        cmd = cmd.Verbose()
-    }
-    cmd = cmd.TestPattern(opt.TestPattern)
-    FatalError(cmd.Run(opt.SpecPattern))
+	cmd := GoTestCommand().
+		SpecGoFiles(specfiles)
+	if opt.Verbose {
+		cmd = cmd.Verbose()
+	}
+	cmd = cmd.TestPattern(opt.TestPattern)
+	FatalError(cmd.Run(opt.SpecPattern))
 }

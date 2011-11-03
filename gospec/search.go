@@ -7,29 +7,42 @@ package main
  *  Description: <no value>
  */
 import (
-    "path/filepath"
-    "strings"
-    "os"
+	"path/filepath"
+	"strings"
+	"os"
 )
 
 const SpecSuffix = "_spec.go"
 
 type SpecCollector []string
 
-func (sc *SpecCollector) VisitDir(path string, f *os.FileInfo) bool { return true }
-func (sc *SpecCollector) VisitFile(path string, f *os.FileInfo) {
-    if strings.HasSuffix(f.Name, SpecSuffix) {
-        *sc = append(*sc, path)
+func (sc *SpecCollector) Walk(path string, f *os.FileInfo, err error) error {
+    if err != nil {
+        return err
     }
+    if f.IsDirectory() {
+        return nil
+    }
+	if strings.HasSuffix(f.Name, SpecSuffix) {
+		*sc = append(*sc, path)
+	}
+    return nil
+}
+
+func (sc *SpecCollector) WalkFunc() (fn filepath.WalkFunc) {
+    fn = func(path string, f *os.FileInfo, err error) error {
+        return sc.Walk(path, f, err)
+    }
+    return
 }
 
 //  Finds all files <root>/**/*.spec
-func SpecGoFiles(root string) (files []string, err os.Error) {
-    if root, err = filepath.Abs(root); err != nil {
-        return
-    }
-    var sc SpecCollector
-    filepath.Walk(root, &sc, nil)
-    files = sc
-    return
+func SpecGoFiles(root string) (files []string, err error) {
+	if root, err = filepath.Abs(root); err != nil {
+		return
+	}
+	var sc SpecCollector
+	err = filepath.Walk(root, sc.WalkFunc())
+	files = sc
+	return
 }

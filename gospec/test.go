@@ -7,9 +7,9 @@ package main
  *  Description: <no value>
  */
 import (
-    "exec"
-    "fmt"
-    "os"
+	"exec"
+	"fmt"
+	"os"
 )
 
 type GoTest []string
@@ -17,33 +17,33 @@ type GoTest []string
 func GoTestCommand() GoTest { return nil }
 
 func (cmd1 GoTest) SpecGoFiles(specfiles []string) (cmd2 GoTest) {
-    cmd2 = cmd1
-    for i := range specfiles {
-        cmd2 = append(cmd2, "-file", specfiles[i])
-    }
-    return
+	cmd2 = cmd1
+	for i := range specfiles {
+		cmd2 = append(cmd2, "-file", specfiles[i])
+	}
+	return
 }
 
 func (cmd1 GoTest) Verbose() (cmd2 GoTest) {
-    cmd2 = cmd1
-    cmd2 = append(cmd2, "-v")
-    return
+	cmd2 = cmd1
+	cmd2 = append(cmd2, "-v")
+	return
 }
 
 func (cmd1 GoTest) TestPattern(pattern string) (cmd2 GoTest) {
-    cmd2 = cmd1
-    cmd2 = append(cmd2, fmt.Sprintf("-run=%s", pattern))
-    return
+	cmd2 = cmd1
+	cmd2 = append(cmd2, fmt.Sprintf("-run=%s", pattern))
+	return
 }
 
-func (cmd GoTest) Run(specpattern string) os.Error {
-    excmd := exec.Command("gotest", cmd...)
+func (cmd GoTest) Run(specpattern string) error {
+	excmd := exec.Command("gotest", cmd...)
 
-    excmd.Env = os.Environ()
-    excmd.Env = append(excmd.Env, fmt.Sprintf("GOSPECPATTERN=%s", specpattern))
+	excmd.Env = os.Environ()
+	excmd.Env = append(excmd.Env, fmt.Sprintf("GOSPECPATTERN=%s", specpattern))
 
-    excmd.Stdout = os.Stdout
-    excmd.Stderr = os.Stderr
-    excmd.Stdin = os.Stdin
-    return excmd.Run()
+	excmd.Stdout = os.Stdout
+	excmd.Stderr = os.Stderr
+	excmd.Stdin = os.Stdin
+	return excmd.Run()
 }
