@@ -1,9 +1,10 @@
-About GoSpec
+About Go-Spec
 =============
 
-GoSpec is another interpretation of RSpec for the Go language.
+Go-Spec is another interpretation of RSpec for the Go language. It provides
+a behavior driven development (BDD) framework wrapping Gotest.
 
-GoSpec provides a package "spec" for writing descriptive tests in Go. It also
+Go-Spec provides a package "spec" for writing descriptive tests in Go. It also
 provides a command line program `gospec` for running these tests. Doing these
 things, GoSpec creates a thing wrapper over Go's "testing" package and `gotest`
 respectively.
@@ -14,12 +15,13 @@ Documentation
 Prerequisites
 -------------
 
-You must have Go installed (http://golang.org/). 
+[Install Go](http://golang.org/). 
 
 Installation
 -------------
 
-See `spec/` and `gospec/`
+See [spec/](https://github.com/bmatsuo/go-spec/tree/master/spec)
+and [spec/](https://github.com/bmatsuo/go-spec/tree/master/gospec)
 
 Examples
 --------
@@ -41,7 +43,8 @@ tests written using the "spec" package.
 General Documentation
 ---------------------
 
-See `spec/` and `gospec/`
+See [spec/](https://github.com/bmatsuo/go-spec/tree/master/spec)
+and [spec/](https://github.com/bmatsuo/go-spec/tree/master/gospec)
 
 Author
 ======
