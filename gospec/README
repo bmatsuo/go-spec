@@ -1,0 +1,46 @@
+gospec version 0.0_1
+=======================================================================
+
+ABOUT gospec
+
+    <no value>
+
+USAGE
+
+    Run gospec with the command
+
+        gospec [options]
+
+PREREQUISITES
+
+    You must have Go installed (http://golang.org/). 
+
+INSTALLATION
+
+    Use goinstall to install gospec
+
+        goinstall github.com/bmatsuo/gospec
+
+DOCUMENTATION
+
+    Use godoc to vew the documentation for gospec
+
+        godoc github.com/bmatsuo/gospec
+
+    Or alternatively, use a godoc http server
+
+        godoc -http=:6060
+
+    and view the url localhost:6060/pkg/github.com/bmatsuo/gospec/
+
+AUTHOR
+
+    Bryan Matsuo <bmatsuo@soe.ucsc.edu>
+
+COPYRIGHT & LICENSE
+
+    Copyright (c) 2011, Bryan Matsuo.
+    All rights reserved.
+
+    Use of this source code is governed by a BSD-style license that can
+    be found in the LICENSE file.

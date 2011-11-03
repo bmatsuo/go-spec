@@ -17,20 +17,20 @@ Installation
 
 Use goinstall to install go-spec
 
-    goinstall github.com/bmatsuo/spec
+    goinstall github.com/bmatsuo/go-spec/spec
 
 General Documentation
 ---------------------
 
 Use godoc to vew the documentation for go-spec
 
-    godoc github.com/bmatsuo/spec
+    godoc github.com/bmatsuo/go-spec/spec
 
 Or alternatively, use a godoc http server
 
     godoc -http=:6060
 
-and view the url http://localhost:6060/pkg/github.com/bmatsuo/spec/
+and view the url http://localhost:6060/pkg/github.com/bmatsuo/go-spec/spec
 
 Author
 ======

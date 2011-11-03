@@ -7,9 +7,14 @@
 
 include $(GOROOT)/src/Make.inc
 
-TARG=spec
+TARG=gospec
 GOFILES=\
-        spec.go\
+		test.go\
+		search.go\
+        options.go\
+        gospec.go\
 
-include $(GOROOT)/src/Make.pkg
+include $(GOROOT)/src/Make.cmd
 
+test:
+	gotest
