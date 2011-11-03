@@ -11,14 +11,14 @@ import (
 	"reflect"
 )
 
-func (t *SpecTest) exec(m Matcher, negated bool, args []interface{}) (pass bool, err error) {
+func (t *SpecTest) exec(m Matcher, negated bool, args []interface{}) {
 	if len(args) < 1 {
 		// Serious error
 		t.Errorf("Spec error: Missing Value")
 		return
 	}
 	if negated {
-		defer func() { pass = !pass }()
+		defer func() { t.passed = !t.passed }()
 	}
 
 	if n := len(args); n < m.NumIn() {
@@ -28,7 +28,14 @@ func (t *SpecTest) exec(m Matcher, negated bool, args []interface{}) (pass bool,
 		t.Errorf("Spec error: Unexpected arguments %v", args[n:])
 		return
 	}
-    return m.Matches(args)
+    t.passed, t.err = m.Matches(args)
+    if t.err == nil {
+        t.err = m.Error()
+    }
+    if t.err != nil {
+        panic(t.err)
+    }
+    // Matcher errors messages are handled in Describe
 }
 
 func (t *SpecTest) equal(a, b interface{}) (bool, error) {

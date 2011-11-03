@@ -308,12 +308,17 @@ func (t *SpecTest) Describe(thing string, does func()) {
 	does()
 	if t.ranspec {
 		// Compute the result of executed Spec calls.
-		ok := t.passed && t.err == nil
-		result := "PASS"
-		if t.err != nil {
+        ok := t.passed && t.err == nil
+        var result string
+		switch {
+        case ok:
+		    result = "PASS"
+        case t.err != nil:
 			result = "ERROR"
-		} else if !t.passed {
+		case !t.passed:
 			result = "FAIL"
+        default:
+            panic("unexpected outcome")
 		}
 
 		// Write a message summarizing Spec calls.
@@ -411,7 +416,7 @@ func (t *SpecTest) Spec(spec ...interface{}) {
 		t.spec = seq
 		return
 	}
-	t.passed, t.err = t.exec(m, negated, args)
+	t.exec(m, negated, args)
 	if !t.passed || t.err != nil {
 		t.spec = seq
 	}

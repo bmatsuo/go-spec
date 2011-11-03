@@ -60,17 +60,20 @@ func matcherSatisfy(x, fn interface{}) (pass bool, err error) {
 	x = valueOfSpecValue(x)
 	if typ := fnval.Type(); typ.NumIn() != 1 {
 		// error: fn must accept a single value.
-		return false, errors.New("Satisfy needs a function of one argument")
+		err = errors.New("Satisfy needs a function of one argument")
 	} else if xtyp := reflect.TypeOf(x); !xtyp.AssignableTo(typ.In(0)) {
 		// error: fn must accept x
-		return false, errors.New("Satisfy argument type-mismatch")
+        err = errors.New("Satisfy argument type-mismatch")
 	} else if typ.NumOut() != 1 {
 		// error: fn must return one value
-		return false, errors.New("Satisfy needs a predicate (func(x) bool)")
+        err = errors.New("Satisfy needs a predicate (func(x) bool)")
 	} else if !typ.Out(0).AssignableTo(boolType) {
 		// error: fn must return bool
-		return false, errors.New("Satisfy output type-mismatch")
+        err = errors.New("Satisfy output type-mismatch")
 	}
+    if err != nil {
+        return
+    }
 	fnout := fnval.Call([]reflect.Value{reflect.ValueOf(x)})
 	pass = fnout[0].Bool()
 	return
@@ -149,7 +152,7 @@ func (ep errpanic) Error() string {
 	return fmt.Sprintf("runtime panic: %v", ep.v)
 }
 
-func (m match) call(args []reflect.Value) (pass bool, err error) {
+func (m *match) call(args []reflect.Value) (pass bool, err error) {
 	defer func() {
 		if e := recover(); e != nil {
 			m.err = errpanic{e}
@@ -169,7 +172,7 @@ func (m match) call(args []reflect.Value) (pass bool, err error) {
 	return
 }
 
-func (m match) Matches(args []interface{}) (bool, error) {
+func (m *match) Matches(args []interface{}) (bool, error) {
 	n := len(args)
 	// Check the arguments.
 	if n != m.NumIn() {
@@ -182,9 +185,9 @@ func (m match) Matches(args []interface{}) (bool, error) {
 	}
 	return m.call(vals)
 }
-func (m match) String() string { return m.name }
-func (m match) Error() error   { return m.err }
-func (m match) NumIn() int     { return m.typ.NumIn() }
+func (m *match) String() string { return m.name }
+func (m *match) Error() error   { return m.err }
+func (m *match) NumIn() int     { return m.typ.NumIn() }
 
 //  Create a new Matcher object from function fn. Function fn must take
 //  at least one argument and return exactly one bool.
