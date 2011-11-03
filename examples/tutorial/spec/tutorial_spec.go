@@ -86,7 +86,7 @@ func TestSpecTutorial(T *testing.T) {
 					s.Spec(1, Should, Not, Equal, 2)
 				})
 				s.It("can verify predicate func of a Value returns true", func() {
-					s.Spec(false, Should, Satisfy, func(x bool) bool { return !x })
+					s.Spec(true, Should, Satisfy, func(b bool) bool { return b })
 				})
 			})
 

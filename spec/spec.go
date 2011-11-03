@@ -125,18 +125,20 @@ type Test interface {
 	Failed() bool
 }
 
+type stringer interface {
+    String() string
+}
+
 //  Returns a human-readable interpretation of a Spec sequence.
 func specString(spec sequence) string {
 	s := make([]string, len(spec))
 	for i, v := range spec {
-		switch v.token {
-		case tFunction:
-			s[i] = v.value.(Function).String()
-		case tSugar:
-			s[i] = v.value.(Sugar).String()
+        switch v.value.(type) {
+            case stringer:
+                s[i] = v.value.(stringer).String()
 		default:
 			s[i] = fmt.Sprintf("%#v", v.value)
-		}
+        }
 	}
 	return strings.Join(s, " ")
 }
@@ -231,7 +233,7 @@ type SpecTest struct {
 	runspec     bool
 	passed      bool
 	ranspec     bool
-	error       error
+	err         error
 	beforestack [][]trigger
 	deferstack  [][]trigger
 	descstack   []string
@@ -287,7 +289,7 @@ func (t *SpecTest) Describe(thing string, does func()) {
 		t.spec = nil
 		t.passed = true
 		t.ranspec = false
-		t.error = nil
+		t.err = nil
 		t.runspec = oldrunspec
 	}()
 
@@ -306,9 +308,9 @@ func (t *SpecTest) Describe(thing string, does func()) {
 	does()
 	if t.ranspec {
 		// Compute the result of executed Spec calls.
-		ok := t.passed && t.error == nil
+		ok := t.passed && t.err == nil
 		result := "PASS"
-		if t.error != nil {
+		if t.err != nil {
 			result = "ERROR"
 		} else if !t.passed {
 			result = "FAIL"
@@ -319,8 +321,8 @@ func (t *SpecTest) Describe(thing string, does func()) {
 		if !ok {
 			msg += fmt.Sprintf("\n\t%s", specString(t.spec))
 		}
-		if t.error != nil {
-			msg += fmt.Sprintf("\n\tError: %s", t.error.Error())
+		if t.err != nil {
+			msg += fmt.Sprintf("\n\tError: %s", t.err.Error())
 		}
 
 		// Write the message as an error if there was a problem.
@@ -389,7 +391,7 @@ func (t *SpecTest) Spec(spec ...interface{}) {
 
 	var (
 		seq     sequence
-		fn      Function
+		m       Matcher
 		negated bool
 		args    []interface{}
 	)
@@ -399,18 +401,18 @@ func (t *SpecTest) Spec(spec ...interface{}) {
 	})
 
 	t.ranspec = true
-	seq, t.error = t.scan(spec)
-	if t.error != nil {
+	seq, t.err = t.scan(spec)
+	if t.err != nil {
 		t.spec = seq
 		return
 	}
-	fn, negated, args, t.error = t.parse(seq)
-	if t.error != nil {
+	m, negated, args, t.err = t.parse(seq)
+	if t.err != nil {
 		t.spec = seq
 		return
 	}
-	t.passed, t.error = t.exec(fn, negated, args)
-	if !t.passed || t.error != nil {
+	t.passed, t.err = t.exec(m, negated, args)
+	if !t.passed || t.err != nil {
 		t.spec = seq
 	}
 }

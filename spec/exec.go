@@ -11,7 +11,7 @@ import (
 	"reflect"
 )
 
-func (t *SpecTest) exec(fn Function, negated bool, args []interface{}) (pass bool, err error) {
+func (t *SpecTest) exec(m Matcher, negated bool, args []interface{}) (pass bool, err error) {
 	if len(args) < 1 {
 		// Serious error
 		t.Errorf("Spec error: Missing Value")
@@ -20,26 +20,15 @@ func (t *SpecTest) exec(fn Function, negated bool, args []interface{}) (pass boo
 	if negated {
 		defer func() { pass = !pass }()
 	}
-	val := args[0]
 
-	if n := len(args) - 1; n < fn.NumArg() {
+	if n := len(args); n < m.NumIn() {
 		t.Errorf("Spec error: Missing argument")
 		return
-	} else if n > fn.NumArg() {
+	} else if n > m.NumIn() {
 		t.Errorf("Spec error: Unexpected arguments %v", args[n:])
 		return
 	}
-
-	// Handle the Function fn.
-	switch fn {
-	case Equal:
-		pass, err = t.equal(val, args[1])
-	case Satisfy:
-		pass, err = t.satisfy(val, args[1])
-	case HaveError:
-		pass, err = t.haveError(val)
-	}
-	return
+    return m.Matches(args)
 }
 
 func (t *SpecTest) equal(a, b interface{}) (bool, error) {

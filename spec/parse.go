@@ -25,28 +25,28 @@ func (s Sugar) String() string {
     case Not:
         return "Not"
 	}
-	panic("Bad Sugar")
+	panic(ErrBadSugar)
 }
 
 //  Functions over Spec Values that can be used in Spec sequences. See Spec.
 type Function uint
 
 const (
-	Equal Function = iota
-	Satisfy
-	HaveError
+	FEqual Function = iota
+	FSatisfy
+	FHaveError
 )
 
 var fnNumArg = []int{
-	Equal:     1,
-	Satisfy:   1,
-	HaveError: 0,
+	FEqual:     1,
+	FSatisfy:   1,
+	FHaveError: 0,
 }
 
 var fnString = []string{
-	Equal:     "Equal",
-	Satisfy:   "Satisfy",
-	HaveError: "HaveError",
+	FEqual:     "Equal",
+	FSatisfy:   "Satisfy",
+	FHaveError: "HaveError",
 }
 
 //  Return the number of arguments taken by Function fn. This is the number
@@ -156,7 +156,7 @@ func (t *SpecTest) scan(values []interface{}) (seq sequence, err error) {
 	return
 }
 
-func (t *SpecTest) parse(seq sequence) (fn Function, negated bool, args []interface{}, err error) {
+func (t *SpecTest) parse(seq sequence) (m Matcher, negated bool, args []interface{}, err error) {
 	var (
 		i, k   int         // Index,   Gobbled
 		v1, v2 interface{} // Object,  Argument
@@ -199,7 +199,7 @@ func (t *SpecTest) parse(seq sequence) (fn Function, negated bool, args []interf
 		t.doDebug(func() { t.Log(specString(seq[i:])) })
 	}
 	// Look for Function.
-	k, fn, err = t.parseFunction(seq[i:])
+	k, m, err = t.parseMatcher(seq[i:])
 	i += k
 	if err != nil {
 		return
@@ -207,9 +207,9 @@ func (t *SpecTest) parse(seq sequence) (fn Function, negated bool, args []interf
 
 	args = make([]interface{}, 1, 2)
 	args[0] = v1
-	if fn.NumArg() > 0 {
+	if m.NumIn() > 1 {
 		// Look for a Function argument if necessary.
-		if fn.NumArg() > 1 {
+		if m.NumIn() > 2 {
 			err = errors.New("Needs too many arguments")
 			return
 		}
@@ -322,6 +322,7 @@ func (t *SpecTest) parseValue(seq sequence) (i int, v interface{}, err error) {
 	return
 }
 
+
 func (t *SpecTest) parseFunction(seq sequence) (i int, fn Function, err error) {
 	if len(seq) == 0 {
 		err = errors.New("empty")
@@ -331,11 +332,25 @@ func (t *SpecTest) parseFunction(seq sequence) (i int, fn Function, err error) {
 	switch piece := seq[0]; piece.token {
 	case tFunction:
 		fn = piece.value.(Function)
-	case tSugar:
-		err = errors.New("Unexpected Sugar")
+	    i++
 	default:
 		err = errors.New("Missing Function")
 	}
-	i++
+	return
+}
+
+func (t *SpecTest) parseMatcher(seq sequence) (i int, m Matcher, err error) {
+	if len(seq) == 0 {
+		err = errors.New("empty")
+		return
+	}
+
+	switch piece := seq[0]; piece.token {
+	case tMatcher:
+        m = piece.value.(Matcher)
+	    i++
+	default:
+		err = errors.New("Missing Matcher")
+	}
 	return
 }
