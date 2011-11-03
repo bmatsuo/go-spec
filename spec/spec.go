@@ -15,13 +15,6 @@ Package spec provides descriptive and flexible wrappers of the "testing"
 package. It can be used along with command Gotest, or with the companion
 command GoSpec.
 
-GoSpec is meant to make writing comprehensive unit testing easier to manage
-with Go. The "testing" package and Gotest are pretty good for out-of-the-box
-functionality. But managing a large project with them is not very feasible.
-Obviously inspired by Ruby's RSpec gem, GoSpec is used to write nested
-specifications which test as well as describe the functionality of programs,
-workflows, and objects.
-
 Specifications (or Specs) are defined by nesting them in a Describe call.
 The Describe function has aliases They and It
 
