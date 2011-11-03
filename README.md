@@ -19,7 +19,7 @@ You must have Go installed (http://golang.org/).
 Installation
 -------------
 
-See `gospec/`
+See `spec/` and `gospec/`
 
 Examples
 --------

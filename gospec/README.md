@@ -1,12 +1,17 @@
-About GoSpec
+About Gospec
 ============
 
-Gospec is a lightweight wrapper for gotest for "spec" package users. It
+Gospec is a lightweight wrapper for gotest (for "spec" package users). It
 spearches for spec files (`*_spec.go`) in the directory `./spec/`.  It
 executes these files with the help of the standard Gotest command.
 
-Gospec allows for Specs to be run selectively by matching the context they
-belong to against a regular expression.
+Go-Spec allows for Specs to be run selectively by matching the context they
+belong to against a regular expression by using the environment variable
+GOSPECPATTERN, which is used by the "spec" package.
+
+Using Gospec does not depend on the "spec" package. As long as the naming
+and directory structure is followed any "testing" files can be executed by
+Gospec.
 
 Documentation
 =============
@@ -17,13 +22,10 @@ Install Gospec with Goinstall
 
     goinstall github.com/bmatsuo/go-spec/gospec
 
-This will install the "spec" package aswell. Or, you can build both the package
-and the program yourself by cloning the repository.
+Or, you can build program yourself by cloning the repository.
 
     git clone https://github.com/bmatsuo/go-spec/gospec
-    cd go-spec/spec
-    gomake install
-    cd ../gospec
+    cd go-spec/gospec
     gomake install
 
 Usage
