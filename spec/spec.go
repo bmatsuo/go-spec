@@ -10,7 +10,89 @@
  *  Description: <no value>
  */
 
-// Package spec does ....
+/*
+Package spec provides descriptive and flexible wrappers of the "testing"
+package. It can be used along with command Gotest, or with the companion
+command GoSpec.
+
+GoSpec is meant to make writing comprehensive unit testing easier to manage
+with Go. The "testing" package and Gotest are pretty good for out-of-the-box
+functionality. But managing a large project with them is not very feasible.
+Obviously inspired by Ruby's RSpec gem, GoSpec is used to write nested
+specifications which test as well as describe the functionality of programs,
+workflows, and objects.
+
+Specifications (or Specs) are defined by nesting them in a Describe call.
+The Describe function has aliases They and It
+
+    
+    import (
+        "import"
+        . "spec"
+    )
+    func TestFunction(T *testing.T) {
+        s := New(T)
+        s.Describe(`The "strconv" package`, func() {
+            s.Describe("integer conversion", func(){
+                s.Describe("with Itoa", func() {
+                    s.It("makes strings from integers", func() {
+                        s.Spec(
+                            func()string{ return strconv.Itoa(123) },
+                            Should, Equal, "123")
+                    })
+                })
+                s.It("with Atoi", func() {
+                    s.It("converts decimal character strings to integers", func() {
+                        decconv := func()(int,error){ return strconv.Atoi("123") }
+                        s.Spec(decconv, Should, Not, HaveError)
+                        s.Spec(decconv, Should, Satisfy, func(x int) bool { return x == 123 })
+                    })
+                    s.It("can't convert hex character strings to integers", func() {
+                        hexconv := func()(int,error){ return strconv.Atoi("0x123") }
+                        s.Spec(hexconv , Should, Not, Equal, 0x123)
+                    })
+                })
+            })
+        })
+    }
+
+The above example defines the following tests
+
+    The "strconv" package integer conversion with ItoA makes strings from integers
+    The "strconv" package integer conversion with Atoi converts decimal character strings to integers
+    The "strconv" package integer conversion with Atoi can't convert hex character strings to integers
+
+The spec package makes use of runtime reflection, predicate functions, and deep
+equality checking to be a flexible and lightweight test framework.
+
+The Spec argument sequence has the following grammar
+
+    VALUE [INDEX] Should [Not] FUNCTION [ARGUMENT]
+
+The general thinking is that (element INDEX of) VALUE is an object and FUNCTION
+acts as a method of VALUE with a boolean return type. The "Not" keyword
+obviously negates the returned value of FUNCTION.
+
+VALUE can be either a normal Go value (int, string, float64, struct, interface,
+...). It can also be a nil-adic function with at least one return value. If
+VALUE is a nil-adic function, it is called before the spec is evaluated. If
+INDEX is given, that nil-adic function return value is used as the object.
+The first nil-adic function return value is used an the object when no INDEX
+is given.
+
+FUNCTION can be any of the keywords
+
+    Equal
+    Satisfy
+    HaveError
+
+Equal and Satisfy both require a single argument while HaveError requires none.
+Equal performs a deep equality test of the object against an argument object.
+Satisfy requires a predicate function (boolean function of one argument) and
+is true if the predicate is true for the object. HaveError requires the object
+to be nil-adic which returns an error in its last return value. It returns true
+if the function returned an error.
+*/
 package spec
 
 import (
@@ -265,19 +347,7 @@ func (t *SpecTest) They(specification string, check func()) { t.Describe(specifi
 //      Spec( v, Should, HaveError)
 //      Spec( v, Should, Equal, "abc")
 func (t *SpecTest) Spec(spec ...interface{}) {
-    t.getSpecRegexp()
-
-    if !t.runspec {
-        return
-    }
-
-    var (
-        seq     sequence
-        fn      Function
-        negated bool
-        args    []interface{}
-    )
-
+    // Run triggers regardless of context's matching status
     before := t.beforestack
     for i := 0; i < t.depth; i++ {
         if k := len(before[i]); k > 0 {
@@ -296,7 +366,6 @@ func (t *SpecTest) Spec(spec ...interface{}) {
         }
     }
     t.beforestack = before
-
     after := t.deferstack
     for i := 0; i < t.depth; i++ {
         if k := len(after[i]); k > 0 {
@@ -315,6 +384,18 @@ func (t *SpecTest) Spec(spec ...interface{}) {
         }
     }
     t.deferstack = after
+
+    // Don't run the spec if we are not in a matching context.
+    if !t.runspec {
+        return
+    }
+
+    var (
+        seq     sequence
+        fn      Function
+        negated bool
+        args    []interface{}
+    )
 
     t.doDebug(func(){
         t.Logf("Executing")
