@@ -14,26 +14,26 @@
 package main
 
 import (
-    "exec"
-    "fmt"
-    "os"
+	"exec"
+	"fmt"
+	"os"
 )
 
-func Fatalf(err os.Error) {
-    fmt.Fprintf(os.Stderr, "tutorial: ")
-    fmt.Fprint(os.Stderr, err.String())
-    os.Exit(1)
+func Fatalf(err error) {
+	fmt.Fprintf(os.Stderr, "tutorial: ")
+	fmt.Fprint(os.Stderr, err.Error())
+	os.Exit(1)
 }
 
 func main() {
-    cmd := exec.Command("gospec", "-v", "spec")
+	cmd := exec.Command("gospec", "-v", "spec")
 
-    cmd.Stdout = os.Stdout
-    cmd.Stderr = os.Stderr
-    cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
 
-    err := cmd.Run()
-    if err != nil {
-        Fatalf(err)
-    }
+	err := cmd.Run()
+	if err != nil {
+		Fatalf(err)
+	}
 }
