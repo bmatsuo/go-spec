@@ -5,13 +5,13 @@ Gospec is a lightweight wrapper for gotest (for "spec" package users). It
 spearches for spec files (`*_spec.go`) in the directory `./spec/`.  It
 executes these files with the help of the standard Gotest command.
 
-Go-Spec allows for Specs to be run selectively by matching the context they
+Using Gospec does not depend on the ["spec" package](https://github.com/bmatsuo/go-spec/tree/master/spec).
+As long as the naming and directory structure is followed any "testing" files
+can be executed by Gospec.
+
+Go-Spec allows for spec.Specs to be run selectively by matching the context they
 belong to against a regular expression by using the environment variable
 GOSPECPATTERN, which is used by the "spec" package.
-
-Using Gospec does not depend on the "spec" package. As long as the naming
-and directory structure is followed any "testing" files can be executed by
-Gospec.
 
 Documentation
 =============
@@ -35,7 +35,8 @@ The general gospec command syntax is
 
     gospec [options] [-v] [ROOT [PATTERN ...]]
 
-==Arguments==
+Arguments
+---------
 
 The `ROOT` argument specifies a directory other than `./spec/` to look for
 spec files.  The `PATTERN` arguments define separate regular expressions to
@@ -43,7 +44,8 @@ match against Spec contexts before running. When given, all the `PATTERN`
 arguments are joined with a "|" and the value replaces the value of the flag
 `-spec`.
 
-==Options==
+Options
+-------
 
     -root="./spec"  Directory containing spec files.
 
@@ -64,7 +66,7 @@ Alternatively, use a godoc http server
 
     godoc -http=:6060
 
-and view the url http://localhost:6060/pkg/github.com/bmatsuo/go-spec/gospec
+and view the docs [here](http://localhost:6060/pkg/github.com/bmatsuo/go-spec/gospec)
 
 
 Author
