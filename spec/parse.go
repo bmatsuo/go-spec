@@ -14,94 +14,61 @@ import (
 type Sugar uint8
 
 const (
-    Should Sugar = iota
-    Not
+	Should Sugar = iota
+	Not
 )
 
 func (s Sugar) String() string {
-    switch s {
-    case Should:
+	switch s {
+	case Should:
 		return "Should"
-    case Not:
-        return "Not"
+	case Not:
+		return "Not"
 	}
 	panic(ErrBadSugar)
 }
 
-//  Functions over Spec Values that can be used in Spec sequences. See Spec.
-type Function uint
-
-const (
-	FEqual Function = iota
-	FSatisfy
-	FHaveError
-)
-
-var fnNumArg = []int{
-	FEqual:     1,
-	FSatisfy:   1,
-	FHaveError: 0,
-}
-
-var fnString = []string{
-	FEqual:     "Equal",
-	FSatisfy:   "Satisfy",
-	FHaveError: "HaveError",
-}
-
-//  Return the number of arguments taken by Function fn. This is the number
-//  of arguments following the function name in the Spec sequence.
-func (fn Function) NumArg() int { return fnNumArg[fn] }
-
-//  Return the Function's name as a string.
-func (fn Function) String() string { return fnString[fn] }
-
 //  A call to a nil-adic function. Output values can be accessed.
 type FnCall struct {
-	fn  reflect.Value
-    panicv interface{}
-	out []reflect.Value
+	fn     reflect.Value
+	panicv interface{}
+	out    []reflect.Value
 }
 
-func (fn FnCall)call() (gn FnCall) {
+func (fn FnCall) call() (gn FnCall) {
 	gn.fn = fn.fn
-    defer func() {
-        if e := recover(); e != nil {
-            gn.panicv = e
-        }
-    }()
+	defer func() {
+		if e := recover(); e != nil {
+			gn.panicv = e
+		}
+	}()
 	gn.out = gn.fn.Call([]reflect.Value{})
-    return
+	return
 }
 
 type token uint
 
 const (
 	tSugar token = iota
-    tMatcher
-	tFunction
+	tMatcher
 	tValue
 )
 
 var tokenStr = []string{
-	tSugar:    "Sugar",
-    tMatcher:  "Matcher",
-	tFunction: "Function",
-	tValue:    "Value",
+	tSugar:   "Sugar",
+	tMatcher: "Matcher",
+	tValue:   "Value",
 }
 
-func (t token) String() string   { return tokenStr[t] }
-func (t token) IsSugar() bool    { return t == tSugar }
-func (t token) IsMatcher() bool  { return t == tSugar }
-func (t token) IsFunction() bool { return t == tFunction }
-func (t token) IsValue() bool    { return t == tValue }
+func (t token) String() string  { return tokenStr[t] }
+func (t token) IsSugar() bool   { return t == tSugar }
+func (t token) IsMatcher() bool { return t == tSugar }
+func (t token) IsValue() bool   { return t == tValue }
 
 func tokenOf(v interface{}) (t token) {
 	switch v.(type) {
-    case Matcher:
-        t = tMatcher
-	case Function:
-		t = tFunction
+	case Matcher:
+		t = tMatcher
 	case Sugar:
 		t = tSugar
 	default:
@@ -134,14 +101,11 @@ type elem struct {
 type sequence []elem
 
 var (
-	ErrBadSugar           = errors.New("Bad Sugar")
-	ErrBadFunction        = errors.New("Bad Value")
-	ErrMissingSugar       = errors.New("Missing Value")
-	ErrMissingFunction    = errors.New("Missing Value")
-	ErrMissingValue       = errors.New("Missing Value")
-	ErrUnexpectedSugar    = errors.New("Unexpected Sugar")
-	ErrUnexpectedFunction = errors.New("Unexpected Function")
-	ErrUnexpectedValue    = errors.New("Unexpected Value")
+	ErrBadSugar        = errors.New("Bad Sugar")
+	ErrMissingSugar    = errors.New("Missing Value")
+	ErrMissingValue    = errors.New("Missing Value")
+	ErrUnexpectedSugar = errors.New("Unexpected Sugar")
+	ErrUnexpectedValue = errors.New("Unexpected Value")
 )
 
 func (t *SpecTest) scan(values []interface{}) (seq sequence, err error) {
@@ -177,8 +141,6 @@ func (t *SpecTest) parse(seq sequence) (m Matcher, negated bool, args []interfac
 		if seq[i].value.(Sugar) != Should {
 			err = ErrBadSugar
 		}
-	case tFunction:
-		err = ErrMissingSugar
 	default:
 		err = ErrUnexpectedValue
 	}
@@ -192,13 +154,13 @@ func (t *SpecTest) parse(seq sequence) (m Matcher, negated bool, args []interfac
 			err = ErrBadSugar
 		}
 		negated = true
-	    i++
+		i++
 	}
 
 	if negated {
 		t.doDebug(func() { t.Log(specString(seq[i:])) })
 	}
-	// Look for Function.
+	// Look for Matcher.
 	k, m, err = t.parseMatcher(seq[i:])
 	i += k
 	if err != nil {
@@ -208,7 +170,7 @@ func (t *SpecTest) parse(seq sequence) (m Matcher, negated bool, args []interfac
 	args = make([]interface{}, 1, 2)
 	args[0] = v1
 	if m.NumIn() > 1 {
-		// Look for a Function argument if necessary.
+		// Look for a Matcher argument if necessary.
 		if m.NumIn() > 2 {
 			err = errors.New("Needs too many arguments")
 			return
@@ -252,9 +214,6 @@ func (t *SpecTest) parseValue(seq sequence) (i int, v interface{}, err error) {
 			}
 			i--
 			done = true
-		case tFunction:
-			err = ErrMissingSugar
-			return
 		default:
 			valpieces = append(valpieces, piece)
 		}
@@ -282,7 +241,7 @@ func (t *SpecTest) parseValue(seq sequence) (i int, v interface{}, err error) {
 		}
 		valpieces[0].kind = kFnCall
 		fnval := reflect.ValueOf(v)
-		v = FnCall{fn:fnval}.call()
+		v = FnCall{fn: fnval}.call()
 	}
 
 	// Return when no indexing values are given.
@@ -322,23 +281,6 @@ func (t *SpecTest) parseValue(seq sequence) (i int, v interface{}, err error) {
 	return
 }
 
-
-func (t *SpecTest) parseFunction(seq sequence) (i int, fn Function, err error) {
-	if len(seq) == 0 {
-		err = errors.New("empty")
-		return
-	}
-
-	switch piece := seq[0]; piece.token {
-	case tFunction:
-		fn = piece.value.(Function)
-	    i++
-	default:
-		err = errors.New("Missing Function")
-	}
-	return
-}
-
 func (t *SpecTest) parseMatcher(seq sequence) (i int, m Matcher, err error) {
 	if len(seq) == 0 {
 		err = errors.New("empty")
@@ -347,8 +289,8 @@ func (t *SpecTest) parseMatcher(seq sequence) (i int, m Matcher, err error) {
 
 	switch piece := seq[0]; piece.token {
 	case tMatcher:
-        m = piece.value.(Matcher)
-	    i++
+		m = piece.value.(Matcher)
+		i++
 	default:
 		err = errors.New("Missing Matcher")
 	}
