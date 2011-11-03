@@ -56,30 +56,47 @@ func (fn Function) String() string { return fnString[fn] }
 //  A call to a nil-adic function. Output values can be accessed.
 type FnCall struct {
 	fn  reflect.Value
+    panicv interface{}
 	out []reflect.Value
+}
+
+func (fn FnCall)call() (gn FnCall) {
+	gn.fn = fn.fn
+    defer func() {
+        if e := recover(); e != nil {
+            gn.panicv = e
+        }
+    }()
+	gn.out = gn.fn.Call([]reflect.Value{})
+    return
 }
 
 type token uint
 
 const (
 	tSugar token = iota
+    tMatcher
 	tFunction
 	tValue
 )
 
 var tokenStr = []string{
 	tSugar:    "Sugar",
+    tMatcher:  "Matcher",
 	tFunction: "Function",
 	tValue:    "Value",
 }
 
 func (t token) String() string   { return tokenStr[t] }
 func (t token) IsSugar() bool    { return t == tSugar }
+func (t token) IsMatcher() bool  { return t == tSugar }
 func (t token) IsFunction() bool { return t == tFunction }
 func (t token) IsValue() bool    { return t == tValue }
 
 func tokenOf(v interface{}) (t token) {
 	switch v.(type) {
+    case Matcher:
+        t = tMatcher
 	case Function:
 		t = tFunction
 	case Sugar:
@@ -340,7 +357,7 @@ func (t *SpecTest) parseValue(seq sequence) (i int, v interface{}, err error) {
 		}
 		valpieces[0].kind = kFnCall
 		fnval := reflect.ValueOf(v)
-		v = FnCall{fnval, fnval.Call([]reflect.Value{})}
+		v = FnCall{fn:fnval}.call()
 	}
 
 	// Return when no indexing values are given.

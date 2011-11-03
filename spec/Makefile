@@ -9,6 +9,7 @@ include $(GOROOT)/src/Make.inc
 
 TARG=spec
 GOFILES=\
+		matcher.go\
 		parse.go\
 		exec.go\
         spec.go\
