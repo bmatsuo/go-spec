@@ -18,7 +18,7 @@ Documentation
 Prerequisites
 -------------
 
-You must have Go installed (http://golang.org/). 
+[Install Go](http://golang.org/doc/install.html). 
 
 Installation
 -------------
@@ -44,7 +44,7 @@ Alternatively, use a godoc http server
 
     godoc -http=:6060
 
-and view the urls http://localhost:6060/pkg/github.com/bmatsuo/go-spec/spec
+and view the docs [here](http://localhost:6060/pkg/github.com/bmatsuo/go-spec/spec)
 
 Author
 ======
