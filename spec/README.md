@@ -37,7 +37,7 @@ Examples
 --------
 
 For a tutorial of "spec" written with "spec", check out
-[../examples/tutorial/](https://github.com/bmatsuo/go-spec/tree/master/examples/tutorial).
+[../examples/tutorial/](https://github.com/bmatsuo/go-spec/tree/master/examples/tutorial#readme).
 
 For another example of "spec", look at the
 [Gospec spec file](https://github.com/bmatsuo/go-spec/tree/master/gospec/spec/main_spec.go)
