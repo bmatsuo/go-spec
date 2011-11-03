@@ -21,7 +21,7 @@ Installation
 -------------
 
 See [spec/](https://github.com/bmatsuo/go-spec/tree/master/spec)
-and [spec/](https://github.com/bmatsuo/go-spec/tree/master/gospec)
+and [gospec/](https://github.com/bmatsuo/go-spec/tree/master/gospec)
 
 Examples
 --------
@@ -44,7 +44,7 @@ General Documentation
 ---------------------
 
 See [spec/](https://github.com/bmatsuo/go-spec/tree/master/spec)
-and [spec/](https://github.com/bmatsuo/go-spec/tree/master/gospec)
+and [gospec/](https://github.com/bmatsuo/go-spec/tree/master/gospec)
 
 Author
 ======

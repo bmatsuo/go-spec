@@ -1,11 +1,11 @@
-About GoSpec
+About package "spec"
 =============
 
 Package spec provides descriptive and flexible wrappers of the "testing"
 package. It can be used along with command Gotest, or with the companion
-command GoSpec.
+command [Gospec](https://github.com/bmatsuo/go-spec/tree/master/gospec).
 
-GoSpec is meant to make writing comprehensive unit testing easier to manage
+"spec" is meant to make writing comprehensive unit testing easier to manage
 with Go. The "testing" package and Gotest are pretty good for out-of-the-box
 functionality. But managing a large project with them is not very feasible.
 Obviously inspired by Ruby's RSpec gem, GoSpec is used to write nested
