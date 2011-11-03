@@ -19,8 +19,11 @@ const (
 )
 
 func (s Sugar) String() string {
-	if s == Should {
+    switch s {
+    case Should:
 		return "Should"
+    case Not:
+        return "Not"
 	}
 	panic("Bad Sugar")
 }
@@ -38,14 +41,12 @@ var fnNumArg = []int{
 	Equal:     1,
 	Satisfy:   1,
 	HaveError: 0,
-	Not:       1,
 }
 
 var fnString = []string{
 	Equal:     "Equal",
 	Satisfy:   "Satisfy",
 	HaveError: "HaveError",
-	Not:       "Not",
 }
 
 //  Return the number of arguments taken by Function fn. This is the number
@@ -183,16 +184,15 @@ func (t *SpecTest) parse(seq sequence) (fn Function, negated bool, args []interf
 	}
 	i++
 
-	t.doDebug(func() { t.Log(specString(seq[i:])) })
-	// Look for function negation, Not.
+	// Look for Not separating value and function.
 	negated = false
 	switch seq[i].token {
-	case tFunction:
-		if seq[i].value.(Function) == Not {
-			negated = true
-			i++
+	case tSugar:
+		if seq[i].value.(Sugar) != Not {
+			err = ErrBadSugar
 		}
-	default:
+		negated = true
+	    i++
 	}
 
 	if negated {
@@ -226,83 +226,6 @@ func (t *SpecTest) parse(seq sequence) (fn Function, negated bool, args []interf
 	}
 	return
 }
-/*
-func (t *SpecTest) parseSpec(specpieces []interface{}) (fn Function, negated bool, args []interface{}, err os.Error) {
-    var (
-        i, k   int          // Index,   Gobbled
-        v1, v2 interface{}  // Object,  Argument
-    )
-    if len(specpieces) == 0 {
-        err = os.NewError("No pieces")
-        return
-    }
-
-    t.doDebug(func() { t.Log(specString(specpieces[i:])) })
-    // Parse the object Value to be "spec'ed"
-    k, v1, err = t.parseValue(specpieces)
-    i += k
-    if err != nil {
-        return
-    }
-
-    t.doDebug(func() { t.Log(specString(specpieces[i:])) })
-    // Look for Should separating value and function.
-    switch specpieces[i].(type) {
-    case Sugar:
-        if specpieces[i].(Sugar) != Should {
-            err = os.NewError("Bad Sugar")
-        }
-    case Function:
-        err = os.NewError("Missing sugar")
-    default:
-        err = os.NewError("Unexpected value")
-    }
-    i++
-
-    t.doDebug(func() { t.Log(specString(specpieces[i:])) })
-    // Look for function negation, Not.
-    negated = false
-    switch specpieces[i].(type) {
-    case Function:
-        if specpieces[i].(Function) == Not {
-            negated = true
-            i++
-        }
-    default:
-    }
-
-    if negated {
-        t.doDebug(func() { t.Log(specString(specpieces[i:])) })
-    }
-    // Look for Function.
-    k, fn, err = t.parseFunction(specpieces[i:])
-    i += k
-    if err != nil {
-        return
-    }
-
-    args = make([]interface{}, 1, 2)
-    args[0] = v1
-    if fn.NumArg() > 0 {
-        // Look for a Function argument if necessary.
-        if fn.NumArg() > 1 {
-            err = os.NewError("Needs too many arguments")
-            return
-        }
-        t.doDebug(func() { t.Log(specString(specpieces[i:])) })
-        k, v2, err = t.parseValue(specpieces[i:])
-        i += k
-        if err != nil {
-            return
-        }
-        if i < len(specpieces) {
-            err = os.NewError("Excess specification pieces")
-        }
-        args = append(args, v2)
-    }
-    return
-}
-*/
 
 func (t *SpecTest) parseValue(seq sequence) (i int, v interface{}, err error) {
 	if len(seq) == 0 {
@@ -407,10 +330,7 @@ func (t *SpecTest) parseFunction(seq sequence) (i int, fn Function, err error) {
 
 	switch piece := seq[0]; piece.token {
 	case tFunction:
-		if fn = piece.value.(Function); fn == Not {
-			// Function Not is handled before.
-			err = errors.New("Double negative")
-		}
+		fn = piece.value.(Function)
 	case tSugar:
 		err = errors.New("Unexpected Sugar")
 	default:
