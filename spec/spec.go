@@ -7,16 +7,20 @@
  *  Package:     spec
  *  Author:      Bryan Matsuo <bmatsuo@soe.ucsc.edu>
  *  Created:     Tue Nov  1 21:55:30 PDT 2011
- *  Description: <no value>
+ *  Description: Define SpecTest and methods Describe, They, It, Spec.
  */
 
 /*
-Package spec provides descriptive and flexible wrappers of the "testing"
-package. It can be used along with command Gotest, or with the companion
-command GoSpec.
+Package spec provides a flexible behavior-driven development (BDD) framework.
+It wraps the functionality of the standard Go package "testing" to provide
+descriptive and maintainable behavior specifications. Because it wraps
+"testing", it can be used with command Gotest. Or, it can be used with the
+companion command Gospec.
 
 Specifications (or Specs) are defined by nesting them in a Describe call.
-The Describe function has aliases They and It
+Spec and Describe are methods of the SpecTest type, the primary type of "spec".
+The Describe method has aliases They and It. A new SpecTest is created with the
+New function.
 
     
     import (
