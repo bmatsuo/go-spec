@@ -5,7 +5,7 @@ Gospec is a lightweight wrapper for gotest (for "spec" package users). It
 spearches for spec files (`*_spec.go`) in the directory `./spec/`.  It
 executes these files with the help of the standard Gotest command.
 
-Using Gospec does not depend on the ["spec" package](https://github.com/bmatsuo/go-spec/tree/master/spec).
+Using Gospec does not depend on the ["spec" package](https://github.com/bmatsuo/go-spec/tree/master/spec#readme).
 As long as the naming and directory structure is followed any "testing" files
 can be executed by Gospec.
 

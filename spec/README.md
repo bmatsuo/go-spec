@@ -3,7 +3,7 @@ About package "spec"
 
 Package spec provides descriptive and flexible wrappers of the "testing"
 package. It can be used along with command Gotest, or with the companion
-command [Gospec](https://github.com/bmatsuo/go-spec/tree/master/gospec).
+command [Gospec](https://github.com/bmatsuo/go-spec/tree/master/gospec#readme).
 
 "spec" is meant to make writing comprehensive unit testing easier to manage
 with Go. The "testing" package and Gotest are pretty good for out-of-the-box
@@ -32,6 +32,15 @@ Or, you can build both the package and the program yourself by cloning the repos
     git clone https://github.com/bmatsuo/go-spec/gospec
     cd go-spec/spec
     gomake install
+
+Examples
+--------
+
+For a tutorial of "spec" written with "spec", check out
+[../examples/tutorial/](https://github.com/bmatsuo/go-spec/tree/master/examples/tutorial).
+
+For another example of "spec", look at the
+[Gospec spec file](https://github.com/bmatsuo/go-spec/tree/master/gospec/spec/main_spec.go)
 
 General Documentation
 ---------------------

@@ -12,9 +12,9 @@ Prerequisites
 
 * [Install Go](http://golang.org/).
 
-* [Install "spec"](https://github.com/bmatsuo/go-spec/tree/master/spec) locally
+* [Install "spec"](https://github.com/bmatsuo/go-spec/tree/master/spec#readme) locally
 
-* [Install Gospec](https://github.com/bmatsuo/go-spec/tree/master/gospec)
+* [Install Gospec](https://github.com/bmatsuo/go-spec/tree/master/gospec#readme)
 
 Usage
 -----
@@ -30,8 +30,8 @@ This executes the command
 More documentation
 ------------------
 
-See [spec/](https://github.com/bmatsuo/go-spec/tree/master/spec)
-and [gospec/](https://github.com/bmatsuo/go-spec/tree/master/gospec)
+See [spec/](https://github.com/bmatsuo/go-spec/tree/master/spec#readme)
+and [gospec/](https://github.com/bmatsuo/go-spec/tree/master/gospec#readme)
 
 Author
 ======

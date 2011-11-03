@@ -20,8 +20,8 @@ Prerequisites
 Installation
 -------------
 
-See [spec/](https://github.com/bmatsuo/go-spec/tree/master/spec)
-and [gospec/](https://github.com/bmatsuo/go-spec/tree/master/gospec)
+See [spec/](https://github.com/bmatsuo/go-spec/tree/master/spec#readme)
+and [gospec/](https://github.com/bmatsuo/go-spec/tree/master/gospec#readme)
 
 Examples
 --------
@@ -43,8 +43,8 @@ tests written using the "spec" package.
 General Documentation
 ---------------------
 
-See [spec/](https://github.com/bmatsuo/go-spec/tree/master/spec)
-and [gospec/](https://github.com/bmatsuo/go-spec/tree/master/gospec)
+See [spec/](https://github.com/bmatsuo/go-spec/tree/master/spec#readme)
+and [gospec/](https://github.com/bmatsuo/go-spec/tree/master/gospec#readme)
 
 Author
 ======
