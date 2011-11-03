@@ -20,7 +20,7 @@ companion command Gospec.
 Specifications (or Specs) are defined by nesting them in a Describe call.
 Spec and Describe are methods of the SpecTest type, the primary type of "spec".
 The Describe method has aliases They and It. A new SpecTest is created with the
-New function.
+NewSpecTest function.
 
 
     import (
@@ -28,7 +28,7 @@ New function.
         . "spec"
     )
     func TestFunction(T *testing.T) {
-        s := New(T)
+        s := NewSpecTest(T)
         s.Describe(`The "strconv" package`, func() {
             s.Describe("integer conversion", func(){
                 s.Describe("with Itoa", func() {
@@ -246,12 +246,14 @@ type SpecTest struct {
 //          . "spec"
 //      )
 //      func TestObject(T *testing.T) {
-//          s := New(T)
+//          s := NewSpecTest(T)
 //          s.Describe("My object", func() {
 //              ...
 //          })
 //      }
-func New(T Test) *SpecTest { return &SpecTest{Test: T, descstack: nil, debug: false} }
+func NewSpecTest(T Test) *SpecTest {
+    return &SpecTest{Test: T, descstack: nil, debug: false}
+}
 
 //  Execute a function if t.debug is true.
 func (t *SpecTest) doDebug(fn func()) {

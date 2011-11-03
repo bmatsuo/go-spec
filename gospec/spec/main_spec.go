@@ -17,7 +17,7 @@ import (
 )
 
 func TestGoSpec(T *testing.T) {
-    s := New(T)
+    s := NewSpecTest(T)
     s.Describe("GoSpec", func() {
         s.Describe("test files", func() {
             var specfiles []string

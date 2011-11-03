@@ -21,7 +21,7 @@ type TestStruct struct {
 }
 
 func TestSpecTutorial(T *testing.T) {
-	s := New(T)
+	s := NewSpecTest(T)
 	s.Describe("A SpecTest", func() {
 
 		s.Describe("Describe method", func() {
