@@ -1,7 +1,5 @@
-*go-spec/examples/tutorial version 0.0_1*
-
 About the tutorial
-==============
+==================
 
 The go-spec tutorial highlights the features of go-spec. It demonstates use of
 the the command line utility gospec. It also using the "spec" package to
@@ -12,11 +10,11 @@ Documentation
 Prerequisites
 -------------
 
-* You must have Go installed (http://golang.org/).
+* [Install Go](http://golang.org/).
 
-* You must have package "spec" installed locally
+* [Install "spec"](https://github.com/bmatsuo/go-spec/tree/master/spec) locally
 
-* You must also have the gospec program installed
+* [Install Gospec](https://github.com/bmatsuo/go-spec/tree/master/gospec)
 
 Usage
 -----
@@ -28,6 +26,12 @@ Run the tutorial with command
 This executes the command
 
     gospec -v
+
+More documentation
+------------------
+
+See [spec/](https://github.com/bmatsuo/go-spec/tree/master/spec)
+and [gospec/](https://github.com/bmatsuo/go-spec/tree/master/gospec)
 
 Author
 ======
