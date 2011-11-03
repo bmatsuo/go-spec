@@ -13,7 +13,10 @@ import (
 //  Syntactic sugar for Spec sequences. See Spec.
 type Sugar uint8
 
-const Should Sugar = 0
+const (
+    Should Sugar = iota
+    Not
+)
 
 func (s Sugar) String() string {
 	if s == Should {
@@ -29,7 +32,6 @@ const (
 	Equal Function = iota
 	Satisfy
 	HaveError
-	Not
 )
 
 var fnNumArg = []int{
